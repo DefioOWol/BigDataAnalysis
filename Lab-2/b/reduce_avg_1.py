@@ -7,6 +7,9 @@ def reducer():
     Ожидаемый вход: <partition_id>\t<value>
     Выход: <partial_sum>\t<partial_count>
 
+    Суммируем все входные значения и количество элементов.
+    Выводим частичную сумму и количество элементов.
+
     """
     partial_sum = partial_count = 0
 

@@ -7,6 +7,8 @@ def mapper():
     Ожидаемый вход: <value>
     Выход: max\t<value>
 
+    Добавляем ключ `max`, чтобы все значения попали в один reducer.
+
     """
     for line in sys.stdin:
         line = line.strip()

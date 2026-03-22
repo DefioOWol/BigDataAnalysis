@@ -25,14 +25,7 @@ def main():
     by_cat = read_mart_parquet(MART_DIR / "daily_by_category")
     by_store = read_mart_parquet(MART_DIR / "daily_by_store")
 
-    # if by_cat.empty or by_store.empty:
-    #     raise SystemExit("Витрины пусты — проверьте шаг Spark и наличие данных в raw.")
-
-    # # event_date из Parquet обычно уже datetime/date
-    # if not pd.api.types.is_datetime64_any_dtype(by_cat["event_date"]):
-    #     by_cat = by_cat.copy()
-    #     by_cat["event_date"] = pd.to_datetime(by_cat["event_date"])
-
+    # Строим график средней цены по дням и категориям
     fig, ax = plt.subplots(figsize=(10, 5))
     for cat, g in by_cat.groupby("category"):
         g = g.sort_values("event_date")

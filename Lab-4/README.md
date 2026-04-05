@@ -28,10 +28,10 @@
 
 ## Запуск
 
-Запуск производится через `Docker` последовательно (аналогично [Lab-3](Lab-3/README.md)):
+Запуск производится через `Docker` последовательно (аналогично [Lab-3](../Lab-3/README.md)):
 
 1. `docker compose run --rm data_gen` - создает *prices.csv*, *products.json*, *reviews.json*;
-2. `docker compose run --rm spark` - обработка в Spark;
+2. `docker compose run --rm spark_job` - обработка в Spark;
 3. `docker compose run --rm viz` - построение графиков в [plots](./data/plots).
 
 Изменение доступных параметров (констант) согласуется в [domain.py](./scripts/domain.py).

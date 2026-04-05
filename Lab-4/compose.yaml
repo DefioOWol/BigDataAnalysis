@@ -1,0 +1,30 @@
+services:
+  data_gen:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: python scripts/generate_data.py
+
+  spark_job:
+    image: apache/spark:3.5.7-java17-python3
+    working_dir: /app
+    volumes:
+      - .:/app
+    command:
+      - /opt/spark/bin/spark-submit
+      - --master
+      - local[*]
+      - --driver-memory
+      - ${SPARK_DRIVER_MEMORY:-2g}
+      - /app/scripts/spark_job.py
+
+  viz:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command:
+      - sh
+      - -c
+      - pip install -q pandas matplotlib pyarrow && python scripts/plot_mart.py

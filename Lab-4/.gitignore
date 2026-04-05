@@ -1,0 +1,9 @@
+# Directories
+data/clean
+data/mart
+data/export
+
+# Files
+data/raw/*.csv
+data/raw/*.json
+# data/plots/*.jpg

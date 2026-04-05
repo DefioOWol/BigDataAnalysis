@@ -6,3 +6,4 @@
 1. [Белая книга проекта BigData-аналитики](./Lab-1/README.md)
 2. [Хранение больших данных](./Lab-2/README.md)
 3. [Предобработка и визуализация больших данных](./Lab-3/README.md)
+4. [Apache Hadoop. Парадигма MapReduce. Apache Spark.](./Lab-4/README.md)

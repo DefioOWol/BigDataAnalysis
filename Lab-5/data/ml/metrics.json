@@ -1,0 +1,15 @@
+{
+  "rating_regression": {
+    "описание": "Предсказание rating по TF-IDF + категория + shelf_life_days",
+    "rmse": 1.137418033238759,
+    "r2": 8.691302680774449e-06,
+    "train_rows": 96104,
+    "test_rows": 23896
+  },
+  "product_clusters_5": {
+    "описание": "Кластеры товаров по avg_price, avg_rating, review_cnt",
+    "silhouette": 0.49747759139466974,
+    "wssse": 17.575148152317446,
+    "rows": 23
+  }
+}

@@ -1,0 +1,11 @@
+# Directories
+data/clean
+data/mart
+data/export
+data/ml/product_clusters
+data/ml/rating_predictions_sample
+
+# Files
+data/raw/*.csv
+data/raw/*.json
+# data/plots/*.jpg

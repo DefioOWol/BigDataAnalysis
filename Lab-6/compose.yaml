@@ -1,0 +1,120 @@
+services:
+  data_gen:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: python scripts/generate_data.py
+
+  kafka:
+    image: bitnamilegacy/kafka:latest
+    ports:
+      - 9092:9092
+    environment:
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    volumes:
+      - kafka_data:/bitnami/kafka
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  kafka_init:
+    image: bitnamilegacy/kafka:latest
+    entrypoint: ["/bin/bash", "-lc"]
+    command:
+      - |
+        set -e
+        for t in prices.raw prices.transformed prices.filtered; do
+          /opt/bitnami/kafka/bin/kafka-topics.sh --create --if-not-exists \
+            --bootstrap-server kafka:9092 --topic "$$t" --partitions 1 --replication-factor 1
+        done
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+  kafka_transform:
+    image: python:3.12-slim
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    working_dir: /app
+    command:
+      - sh
+      - -c
+      - pip install -q -r requirements-kafka.txt && python scripts/kafka_transform.py
+    volumes:
+      - .:/app
+    depends_on:
+      kafka:
+        condition: service_healthy
+      kafka_init:
+        condition: service_completed_successfully
+
+  kafka_filter:
+    image: python:3.12-slim
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    working_dir: /app
+    command:
+      - sh
+      - -c
+      - pip install -q -r requirements-kafka.txt && python scripts/kafka_filter.py
+    volumes:
+      - .:/app
+    depends_on:
+      kafka:
+        condition: service_healthy
+      kafka_init:
+        condition: service_completed_successfully
+
+  kafka_aggregate:
+    image: python:3.12-slim
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    working_dir: /app
+    command:
+      - sh
+      - -c
+      - pip install -q -r requirements-kafka.txt && python scripts/kafka_aggregate.py
+    volumes:
+      - .:/app
+    depends_on:
+      kafka:
+        condition: service_healthy
+      kafka_init:
+        condition: service_completed_successfully
+
+  kafka_producer:
+    image: python:3.12-slim
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_PRODUCER_ROW_LIMIT: ${KAFKA_PRODUCER_ROW_LIMIT:-200000}
+    working_dir: /app
+    command:
+      - sh
+      - -c
+      - pip install -q -r requirements-kafka.txt && python scripts/kafka_producer.py
+    volumes:
+      - .:/app
+    depends_on:
+      kafka:
+        condition: service_healthy
+      kafka_init:
+        condition: service_completed_successfully
+
+volumes:
+  kafka_data:

@@ -1,0 +1,35 @@
+{
+  "by_category": [
+    {
+      "category": "бакалея",
+      "rows": 214688,
+      "sum_price": 25685957.74,
+      "avg_price": 119.6432
+    },
+    {
+      "category": "бытовая_химия",
+      "rows": 170808,
+      "sum_price": 18795617.63,
+      "avg_price": 110.0394
+    },
+    {
+      "category": "молочные",
+      "rows": 215053,
+      "sum_price": 22227278.12,
+      "avg_price": 103.3572
+    },
+    {
+      "category": "напитки",
+      "rows": 172391,
+      "sum_price": 18276140.7,
+      "avg_price": 106.0156
+    },
+    {
+      "category": "овощи_фрукты",
+      "rows": 214966,
+      "sum_price": 24289254.97,
+      "avg_price": 112.9911
+    }
+  ],
+  "total_filtered_rows": 987906
+}

@@ -8,3 +8,4 @@
 3. [Предобработка и визуализация больших данных](./Lab-3/README.md)
 4. [Apache Hadoop. Парадигма MapReduce. Apache Spark.](./Lab-4/README.md)
 5. [Spark MLlib и Spark ML](./Lab-5/README.md)
+6. [Использование Apache Kafka](./Lab-6/README.md)
